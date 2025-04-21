@@ -36,4 +36,22 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+    public String generateAccessToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*15))
+                .signWith(key)
+                .compact();
+    }
+
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L *60*60))
+                .signWith(key)
+                .compact();
+    }
 }

@@ -30,5 +30,8 @@ public class Users {
     @Column(length = 20)
     private String role = "USER";
 
+    @Column(length = 1000)
+    private String refreshToken;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 }
