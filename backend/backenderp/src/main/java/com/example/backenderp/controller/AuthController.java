@@ -73,4 +73,23 @@ public class AuthController {
 
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody Map<String,String> request) {
+        String refreshToken = request.get("refresh_token");
+
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = jwtTokenProvider.getUsername(refreshToken);
+        Users users = userService.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("사용자 없음"));
+
+        users.setRefreshToken(null);
+        userService.saveUser(users);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 }
